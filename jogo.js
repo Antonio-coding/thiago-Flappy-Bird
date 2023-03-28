@@ -7,33 +7,60 @@ const canvas = document.querySelector("canvas");
 const contexto = canvas.getContext("2d");
 
 //[flappyBird]
-const flappyBird = {
-  spriteX: 33,
-  spriteY: 806,
-  largura: 33,
-  altura: 24,
-  x: 10,
-  y: 50,
-  gravidade: 0.25,
-  velocidade: 0,
-  atualiza() {
-    flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade;
-    flappyBird.y = flappyBird.y + flappyBird.velocidade;
-  },
-  desenho() {
-    contexto.drawImage(
-      sprites,
-      flappyBird.spriteX,
-      flappyBird.spriteY,
-      flappyBird.largura,
-      flappyBird.altura,
-      flappyBird.x,
-      flappyBird.y,
-      flappyBird.largura,
-      flappyBird.altura
-    );
-  },
-};
+function fazColisao(flappyBird, chao){
+const flappyBirdY = flappyBird.y + flappyBird.altura;
+const chaoY = chao.y;
+
+if(flappyBirdY >= chaoY){
+    return true;
+}
+
+return false;
+}
+
+function criaFlappyBird (){
+    const flappyBird = {
+      spriteX: 33,
+      spriteY: 806,
+      largura: 33,
+      altura: 24,
+      x: 10,
+      y: 50,
+      pulo: 4.6,
+      pula(){
+        console.log('devo pular');
+        flappyBird.velocidade = -flappyBird.pulo;
+      },
+      gravidade: 0.25,
+      velocidade: 0,
+      atualiza() {
+        if(fazColisao(flappyBird, chao)){
+            console.log('fez colisão');
+            mudaParaTela(Telas.INICIO);
+            return;
+            
+        };
+        flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade;
+        flappyBird.y = flappyBird.y + flappyBird.velocidade;
+      },
+      desenho() {
+        contexto.drawImage(
+          sprites,
+          flappyBird.spriteX,
+          flappyBird.spriteY,
+          flappyBird.largura,
+          flappyBird.altura,
+          flappyBird.x,
+          flappyBird.y,
+          flappyBird.largura,
+          flappyBird.altura
+        );
+      },
+      return:
+    };
+
+
+}
 
 //[chao]
 const chao = {
@@ -100,6 +127,8 @@ const mensagemFlappyBird = {
   altura: 32,
   x: 100,
   y: 50,
+
+
 
   desenho() {
     contexto.drawImage(
@@ -177,7 +206,7 @@ const planoDeFundo = {
 //
 //[Telas]
 //
-
+const globais = {};
 let telaAtiva = {};
 function mudaParaTela(novaTela) {
   telaAtiva = novaTela;
@@ -185,6 +214,9 @@ function mudaParaTela(novaTela) {
 
 const Telas = {
   INICIO: {
+    inicializa(){
+        globais.flappyBird = criaFlappyBird();
+    },
     desenho() {
       planoDeFundo.desenho();
       chao.desenho();
@@ -205,6 +237,9 @@ Telas.JOGO = {
     planoDeFundo.desenho();
     chao.desenho();
     flappyBird.desenho();
+  },
+  click() {
+    flappyBird.pula();
   },
   atualiza() {
     flappyBird.atualiza();
