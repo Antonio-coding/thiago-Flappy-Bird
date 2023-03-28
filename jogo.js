@@ -69,6 +69,75 @@ const chao = {
     );
   },
 };
+//[mensagemGetReady]
+const mensagemGetReady = {
+  spriteX: 491,
+  spriteY: 134,
+  largura: 133,
+  altura: 32,
+  x: 100,
+  y: 130,
+
+  desenho() {
+    contexto.drawImage(
+      sprites,
+      mensagemGetReady.spriteX,
+      mensagemGetReady.spriteY,
+      mensagemGetReady.largura,
+      mensagemGetReady.altura,
+      mensagemGetReady.x,
+      mensagemGetReady.y,
+      mensagemGetReady.largura,
+      mensagemGetReady.altura
+    );
+  },
+};
+//[mensagemFlappyBird]
+const mensagemFlappyBird = {
+  spriteX: 580,
+  spriteY: 184,
+  largura: 133,
+  altura: 32,
+  x: 100,
+  y: 50,
+
+  desenho() {
+    contexto.drawImage(
+      sprites,
+      mensagemFlappyBird.spriteX,
+      mensagemFlappyBird.spriteY,
+      mensagemFlappyBird.largura,
+      mensagemFlappyBird.altura,
+      mensagemFlappyBird.x,
+      mensagemFlappyBird.y,
+      mensagemFlappyBird.largura,
+      mensagemFlappyBird.altura
+    );
+  },
+};
+//[mensagemTapInstrucao]
+const mensagemTapInstrucao = {
+  spriteX: 513,
+  spriteY: 180,
+  largura: 62,
+  altura: 80,
+  x: 150,
+  y: 180,
+
+  desenho() {
+    contexto.drawImage(
+      sprites,
+      mensagemTapInstrucao.spriteX,
+      mensagemTapInstrucao.spriteY,
+      mensagemTapInstrucao.largura,
+      mensagemTapInstrucao.altura,
+      mensagemTapInstrucao.x,
+      mensagemTapInstrucao.y,
+      mensagemTapInstrucao.largura,
+      mensagemTapInstrucao.altura
+    );
+  },
+};
 
 //[plano de fundo]
 const planoDeFundo = {
@@ -104,14 +173,57 @@ const planoDeFundo = {
     );
   },
 };
-function loop() {
-  planoDeFundo.desenho();
-  chao.desenho();
-  flappyBird.desenho();
 
-  flappyBird.atualiza();
+//
+//[Telas]
+//
+
+let telaAtiva = {};
+function mudaParaTela(novaTela) {
+  telaAtiva = novaTela;
+}
+
+const Telas = {
+  INICIO: {
+    desenho() {
+      planoDeFundo.desenho();
+      chao.desenho();
+      flappyBird.desenho();
+      mensagemGetReady.desenho();
+      mensagemFlappyBird.desenho();
+      mensagemTapInstrucao.desenho();
+    },
+    click() {
+      mudaParaTela(Telas.JOGO);
+    },
+    atualiza() {},
+  },
+};
+
+Telas.JOGO = {
+  desenho() {
+    planoDeFundo.desenho();
+    chao.desenho();
+    flappyBird.desenho();
+  },
+  atualiza() {
+    flappyBird.atualiza();
+  },
+};
+
+function loop() {
+  telaAtiva.desenho();
+  telaAtiva.atualiza();
 
   requestAnimationFrame(loop);
 }
+
+window.addEventListener("click", function () {
+  if (telaAtiva.click) {
+    telaAtiva.click();
+  }
+});
+
+mudaParaTela(Telas.INICIO);
 
 loop();
