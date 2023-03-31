@@ -218,8 +218,8 @@ function mudaParaTela(novaTela) {
 
   if(telaAtiva.inicializa){
     inicializa();
-  }
-}
+  };
+};
 
 const Telas = {
   INICIO: {
@@ -237,8 +237,10 @@ const Telas = {
     click() {
       mudaParaTela(Telas.JOGO);
     },
-    atualiza() {},
-  },
+    atualiza() {
+
+    }
+  }
 };
 
 Telas.JOGO = {
