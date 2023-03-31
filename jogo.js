@@ -7,15 +7,18 @@ const canvas = document.querySelector("canvas");
 const contexto = canvas.getContext("2d");
 
 //[flappyBird]
+
+
+
+
 function fazColisao(flappyBird, chao){
-const flappyBirdY = flappyBird.y + flappyBird.altura;
-const chaoY = chao.y;
-
-if(flappyBirdY >= chaoY){
-    return true;
-}
-
-return false;
+  const flappyBirdY = flappyBird.y + flappyBird.altura;
+  const chaoY = chao.y;
+  
+  if (flappyBirdY >= chaoY) {
+    return true ;
+  }
+  return false;
 }
 
 function criaFlappyBird (){
@@ -29,7 +32,9 @@ function criaFlappyBird (){
       pulo: 4.6,
       pula(){
         console.log('devo pular');
+        console.log('[antes]', flappyBird.velocidade);
         flappyBird.velocidade = -flappyBird.pulo;
+        console.log('[depois]', flappyBird.velocidade);
       },
       gravidade: 0.25,
       velocidade: 0,
@@ -37,12 +42,13 @@ function criaFlappyBird (){
         if(fazColisao(flappyBird, chao)){
             console.log('fez colisão');
             mudaParaTela(Telas.INICIO);
-            return;
-            
+            return;            
         };
+
         flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade;
         flappyBird.y = flappyBird.y + flappyBird.velocidade;
       },
+
       desenho() {
         contexto.drawImage(
           sprites,
@@ -56,11 +62,10 @@ function criaFlappyBird (){
           flappyBird.altura
         );
       },
-      return:
     };
-
-
+    return flappyBird;
 }
+
 
 //[chao]
 const chao = {
@@ -210,17 +215,21 @@ const globais = {};
 let telaAtiva = {};
 function mudaParaTela(novaTela) {
   telaAtiva = novaTela;
+
+  if(telaAtiva.inicializa){
+    inicializa();
+  }
 }
 
 const Telas = {
   INICIO: {
     inicializa(){
-        globais.flappyBird = criaFlappyBird();
+        globais.flappyBird = criaFlappyBird ();
     },
     desenho() {
       planoDeFundo.desenho();
       chao.desenho();
-      flappyBird.desenho();
+      globais.flappyBird.desenho();
       mensagemGetReady.desenho();
       mensagemFlappyBird.desenho();
       mensagemTapInstrucao.desenho();
@@ -236,13 +245,13 @@ Telas.JOGO = {
   desenho() {
     planoDeFundo.desenho();
     chao.desenho();
-    flappyBird.desenho();
+    globais.flappyBird.desenho();
   },
   click() {
-    flappyBird.pula();
+    globais.flappyBird.pula();
   },
   atualiza() {
-    flappyBird.atualiza();
+    globais.flappyBird.atualiza();
   },
 };
 
