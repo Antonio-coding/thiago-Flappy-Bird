@@ -216,7 +216,7 @@ let telaAtiva = {};
 function mudaParaTela(novaTela) {
   telaAtiva = novaTela;
 
-  if(elaAtiva.inicializa && telaAtiva.inicializa()){
+  if(telaAtiva.inicializa && telaAtiva.inicializa()){
     inicializa();
   }
 }
