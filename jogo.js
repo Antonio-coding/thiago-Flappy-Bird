@@ -1,5 +1,6 @@
 console.log("[Thiago] Flappy Bird");
 
+let frames = 0;
 const som_HIT = new Audio();
 som_HIT.src = "./efeitos/death_hit.wav";
 
@@ -51,12 +52,32 @@ function criaFlappyBird() {
       flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade;
       flappyBird.y = flappyBird.y + flappyBird.velocidade;
     },
+movimentos: [
+{spriteX: 33, spriteY: 808,}, //asa para cima
+{spriteX: 79, spriteY: 808,}, //asa para meio
+{spriteX: 122, spriteY: 808,}, //asa para baixo
+{spriteX: 165, spriteY: 808,}, //asa para volta
+],
+frameAtual: 0,
+atualizaOFrameAtual(){
+  const intervaloDeFrames = 10 ;
+  const passouOIntervalo = frames % intervaloDeFrames === 0;
+  
+  if(passouOIntervalo){
+    const baseDoIncremento = 1;
+    const incremento = baseDoIncremento + flappyBird.frameAtual;
+    const baseRepeticao = flappyBird.movimentos.length;
+    flappyBird.frameAtual = incremento % baseRepeticao
 
+  }
+},
     desenho() {
+      flappyBird.atualizaOFrameAtual();
+      const { spriteX,spriteY } = flappyBird.movimentos[flappyBird.frameAtual];
+
       contexto.drawImage(
         sprites,
-        flappyBird.spriteX,
-        flappyBird.spriteY,
+        spriteX, spriteY,
         flappyBird.largura,
         flappyBird.altura,
         flappyBird.x,
@@ -64,8 +85,8 @@ function criaFlappyBird() {
         flappyBird.largura,
         flappyBird.altura
       );
-    },
-  };
+    }
+  }
   return flappyBird;
 }
 
@@ -276,6 +297,8 @@ Telas.JOGO = {
 function loop() {
   telaAtiva.desenho();
   telaAtiva.atualiza();
+
+  frames = frames + 1;
 
   requestAnimationFrame(loop);
 }
